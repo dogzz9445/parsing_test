@@ -31,12 +31,9 @@ async def getOrderBook(session, markets):
 #     return False
 
 async def getTradeTick(session, markets):
-    if len(markets) == 0:
-        return False
     async with session.get(pokemon_url) as resp:
         pokemon = await resp.json()
         print(pokemon['name'])
-    markets = {"market" : markets, "count" : 1}
     response = requests.request("GET", TICKS, params=markets)
     if response.status_code == 200:
         json_response = json.loads(response.text)
