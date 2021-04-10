@@ -2,12 +2,20 @@ import requests
 import json
 import asyncio
 import aiohttp
-from requests import async
+import websockets
 
 ORDERBOOK = "https://api.upbit.com/v1/orderbook"
 TICKER = "https://api.upbit.com/v1/ticker"
 TICKS = "https://api.upbit.com/v1/trades/ticks"
 MARKETS = "https://api.upbit.com/v1/market/all"
+
+def session_decorator(func):
+    async def wrapper(markets: str, session = None):
+        result = None
+        if session == None:
+            async with aiohttp.ClientSession() as session:
+                return await func(session markets)
+        return await func(session, markets)
 
 async def getOrderBook(session, markets):
     if len(markets) == 0:
@@ -20,24 +28,11 @@ async def getOrderBook(session, markets):
         return json_response
     return False
 
-# async def getTradeTick(session, markets):
-#     if len(markets) == 0:
-#         return False
-#     markets = {"market" : markets, "count" : 1}
-#     response = requests.request("GET", TICKS, params=markets)
-#     if response.status_code == 200:
-#         json_response = json.loads(response.text)
-#         return json_response
-#     return False
-
 async def getTradeTick(session, markets):
-    async with session.get(pokemon_url) as resp:
-        pokemon = await resp.json()
-        print(pokemon['name'])
-    response = requests.request("GET", TICKS, params=markets)
-    if response.status_code == 200:
-        json_response = json.loads(response.text)
-        return json_response
+    async with session.get(TICKS, params=markets) as response:
+        result = await response.text()
+        print(result)
+        return result
     return False
 
 def getMarketNames():
@@ -47,6 +42,34 @@ def getMarketNames():
         json_response = json.loads(response.text)
         return json_response
     return False
+
+logger = logging.getLogger(__name__)
+
+is_alive = True
+
+import asyncio
+import websockets
+
+async def 
+
+async def alive():
+    while is_alive:
+        logger.info('alive')
+        await asyncio.sleep(300)
+
+
+async def async_processing():
+    async with websockets.connect('ws://localhost:8765') as websocket:
+        while True:
+            try:
+                message = await websocket.recv()
+                print(message)
+
+            except websockets.exceptions.ConnectionClosed:
+                print('ConnectionClosed')
+                is_alive = False
+                break
+
 
 
 # def markets_names_checker(func):
