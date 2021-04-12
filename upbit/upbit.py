@@ -18,21 +18,19 @@ def session_decorator(func):
 
 async def getOrderBook(session, markets):
     if len(markets) == 0:
-        return False
+        return None
     markets = ','.join(markets)
     markets = {"markets":markets}
     response = requests.request("GET", ORDERBOOK, params=markets)
     if response.status_code == 200:
         json_response = json.loads(response.text)
         return json_response
-    return False
+    return None
 
 async def getTradeTick(session, markets):
     async with session.get(TICKS, params=markets) as response:
-        result = await response.text()
-        print(result)
-        return result
-    return False
+        return wait response.text()
+    return None
 
 def getMarketNames():
     querystring = {"isDetails":"false"}
