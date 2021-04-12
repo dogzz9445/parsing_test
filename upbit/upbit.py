@@ -2,7 +2,6 @@ import requests
 import json
 import asyncio
 import aiohttp
-import websockets
 
 ORDERBOOK = "https://api.upbit.com/v1/orderbook"
 TICKER = "https://api.upbit.com/v1/ticker"
@@ -14,7 +13,7 @@ def session_decorator(func):
         result = None
         if session == None:
             async with aiohttp.ClientSession() as session:
-                return await func(session markets)
+                return await func(session, markets)
         return await func(session, markets)
 
 async def getOrderBook(session, markets):
@@ -42,33 +41,6 @@ def getMarketNames():
         json_response = json.loads(response.text)
         return json_response
     return False
-
-logger = logging.getLogger(__name__)
-
-is_alive = True
-
-import asyncio
-import websockets
-
-async def 
-
-async def alive():
-    while is_alive:
-        logger.info('alive')
-        await asyncio.sleep(300)
-
-
-async def async_processing():
-    async with websockets.connect('ws://localhost:8765') as websocket:
-        while True:
-            try:
-                message = await websocket.recv()
-                print(message)
-
-            except websockets.exceptions.ConnectionClosed:
-                print('ConnectionClosed')
-                is_alive = False
-                break
 
 
 
