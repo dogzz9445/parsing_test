@@ -4,10 +4,13 @@ try:
 except ImportError:
     import _thread as thread
 import time
+from PyQt5.QtCore import *
 
-class WebSocketManager(QtCore.QThread):
+class WebSocketManager(QThread):
     def __init__(self, url: str, parent=None):
         super(WebSocketManager, self).__init__(parent)
+
+        websocket.enableTrace(True)
 
         self.wsapp = websocket.WebSocketApp(
             url, 
